@@ -144,7 +144,7 @@ def selection(population, coefs, the_bank):
        # elif scores[ind] > 1000:  #-(sum(scores)/(len(scores)*0.5)): ## Максимально заданное значение
     #    ammount = population[ind]*(scores[ind]/1000) #*max(scores)-(sum(scores)/(len(scores)*0.5))
         #   mating_pool.extend(ammount)
-    for i in range(int(len(mating_pool)/5)):
+    for i in range(int(len(mating_pool)/8)):
         mating_pool.append(create_session(sos))
     return mating_pool
 
@@ -176,7 +176,7 @@ def crossover_1(genotype_1, genotype_2):
     return kid
 """
 
-def mutation(genome, gamma = 0.7):
+def mutation(genome, gamma = 0.85):
     for purpose in range(len(genome)):
         for order in range(len(genome[purpose])):
             if random.random()>gamma:
@@ -221,8 +221,8 @@ def natsel(population, all_coefs, bank, gen_num):
     for n in range(0, gen_num):
         t = time.time()
         # 1.
-        start = 100*n
-        finish = 100*(n+1)+1
+        start = 200*n
+        finish = 200*(n+1)+1
         coefs = all_coefs[start:finish]
         # 2.
         population = improve_population(population, coefs, bank)
@@ -245,8 +245,8 @@ if __name__ == "__main__":
     _setup_coefs()
 
     pop_amt = 10000
-    gen_amt = 14000
-    bank = 9.98
+    gen_amt = 7000
+    bank = 100
     population = create_population(pop_amt)
     gg = natsel(population, coefs_db, bank, gen_amt)
 
