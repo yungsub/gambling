@@ -4,10 +4,7 @@ import requests
 import numpy as np
 import random
 import sqlite3
-import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-from tqdm import tqdm
-
+import time
 # Variables
 
 database = None
@@ -108,16 +105,12 @@ def create_population(size=20):
     return population
 
 def get_score(genotype, the_bank, coefs, proc = 0.3):
-    global all_coefs
-    score = 0
     last_i = 0
     counter = 0
     wins = 0
     pred_fen = [round(to_coef(gen),2) for gen in genotype[1]]
     bank_perc = [round(to_perc(gen)/100,2) for gen in genotype[0]]
     for i in range(sos,len(coefs)-sos-1,sos):
-    #for i in range(5):
-        #results = [random.choice(coefs) for i in range(10)]
         counter += 1
         bank = the_bank
         results = coefs[last_i:i]
@@ -226,6 +219,7 @@ def natsel(population, all_coefs, bank, gen_num):
     ## 5.Вывести номер популяции, и стратегию лучшего индивида
     best_population = []
     for n in range(0, gen_num):
+        t = time.time()
         # 1.
         start = 100*n
         finish = 100*(n+1)+1
@@ -241,7 +235,7 @@ def natsel(population, all_coefs, bank, gen_num):
         best_population.append(best)
         # 5
 
-        print('gen -', n, 'score:',max(scores), 'mean:',np.mean(scores))
+        print(f'gen - {n}, score: {max(scores)}, mean: {np.mean(scores)}, time: {time.time() - t}')
     return best_population
 
 if __name__ == "__main__":
@@ -249,11 +243,12 @@ if __name__ == "__main__":
     # _download_db()
     _init_db()
     _setup_coefs()
-    print(database)
-    population_amt = 10; generation_amt = 1
-    bank = 20
-    population = create_population(population_amt)
-    gg = natsel(population, coefs_db, bank,generation_amt)
+
+    pop_amt = 10000
+    gen_amt = 14000
+    bank = 9.98
+    population = create_population(pop_amt)
+    gg = natsel(population, coefs_db, bank, gen_amt)
 
     # Checking results
 
