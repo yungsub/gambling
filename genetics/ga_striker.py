@@ -104,7 +104,7 @@ def create_population(size=20):
         population.append(chrome)
     return population
 
-def get_score(genotype, the_bank, coefs, proc = 0.4):
+def get_score(genotype, the_bank, coefs, proc = 0.3):
     last_i = 0
     counter = 0
     wins = 0
@@ -158,7 +158,6 @@ def selection(population, coefs, the_bank):
             mating_pool.extend(ammount)
     for i in range(int(len(mating_pool)/10)):
         mating_pool.append(create_session(sos))
-    print(f'size of mating_pool: {len(mating_pool)}')
     return mating_pool
 
 #population#
