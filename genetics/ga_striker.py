@@ -138,13 +138,19 @@ def selection(population, coefs, the_bank):
     scores = list(map(int, scores))
     for ind in range(len(scores)):
         score = scores[ind]
-        if (score > 0): # and (score <= 10):
+        if (score > 15):
+            ammount = population[ind]*score*score*score
+            mating_pool.extend(ammount)
+        elif (score > 10): # and (score <= 10):
+            ammount = population[ind]*score*score
+            mating_pool.extend(ammount)
+        elif (score > 0): # and (score <= 10):
             ammount = population[ind]*score
             mating_pool.extend(ammount)
        # elif scores[ind] > 1000:  #-(sum(scores)/(len(scores)*0.5)): ## Максимально заданное значение
     #    ammount = population[ind]*(scores[ind]/1000) #*max(scores)-(sum(scores)/(len(scores)*0.5))
         #   mating_pool.extend(ammount)
-    for i in range(int(len(mating_pool)/8)):
+    for i in range(int(len(mating_pool)/10)):
         mating_pool.append(create_session(sos))
     return mating_pool
 
@@ -176,7 +182,7 @@ def crossover_1(genotype_1, genotype_2):
     return kid
 """
 
-def mutation(genome, gamma = 0.85):
+def mutation(genome, gamma = 0.95):
     for purpose in range(len(genome)):
         for order in range(len(genome[purpose])):
             if random.random()>gamma:
@@ -197,8 +203,8 @@ def improve_population(population, coefs, bank, top = 0.2, rand = 0.2):
     new_chromes = scores_chrom[:coef_4_best]
     new_pop = [population[i] for  i in new_chromes]
 
-    for i in range(int(len(population)*rand)):
-        new_pop.append(create_session(sos))
+    #for i in range(int(len(population)*rand)):
+    #    new_pop.append(create_session(sos))
 
     while len(new_pop) != len(population):
         coef_1 = random.randint(0,len(population)-1)
