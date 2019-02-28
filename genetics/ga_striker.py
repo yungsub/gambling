@@ -138,6 +138,9 @@ def selection(population, coefs, the_bank):
     scores = list(map(int, scores))
     for ind in range(len(scores)):
         score = scores[ind]
+        if (score > 17):
+            ammount = population[ind]*score*score*score*10
+            mating_pool.extend(ammount)
         if (score > 15):
             ammount = population[ind]*score*score*score
             mating_pool.extend(ammount)
@@ -147,7 +150,7 @@ def selection(population, coefs, the_bank):
         elif (score > 0): # and (score <= 10):
             ammount = population[ind]*score
             mating_pool.extend(ammount)
-        if len(mating_pool)<5000:
+        if len(mating_pool)<1000:
             ammount = population[ind]
             mating_pool.extend(ammount)
        # elif scores[ind] > 1000:  #-(sum(scores)/(len(scores)*0.5)): ## Максимально заданное значение
