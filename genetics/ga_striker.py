@@ -136,41 +136,40 @@ def selection(population, coefs, the_bank):
         genotype = population[i]
         scores.append(get_score(genotype, the_bank, coefs))
     scores = list(map(int, scores))
+
+    reg_coef = np.mean(scores)
+
     for ind in range(len(scores)):
         score = scores[ind]
         if (score > 17):
-            ammount = population[ind]*score*score*score*10
+            ammount = population[ind]*int((score*score*score*10)/reg_coef)
             mating_pool.extend(ammount)
         if (score > 15):
-            ammount = population[ind]*score*score*score
+            ammount = population[ind]*int((score*score*score)/reg_coef)
             mating_pool.extend(ammount)
-        elif (score > 10): # and (score <= 10):
-            ammount = population[ind]*score*score
+        elif (score > 10):
+            ammount = population[ind]*int((score*score)/reg_coef)
             mating_pool.extend(ammount)
-        elif (score > 0): # and (score <= 10):
-            ammount = population[ind]*score
+        elif (score > 0):
+            ammount = population[ind]*int((score)/reg_coef)
             mating_pool.extend(ammount)
         if len(mating_pool)<1000:
             ammount = population[ind]
             mating_pool.extend(ammount)
-       # elif scores[ind] > 1000:  #-(sum(scores)/(len(scores)*0.5)): ## Максимально заданное значение
-    #    ammount = population[ind]*(scores[ind]/1000) #*max(scores)-(sum(scores)/(len(scores)*0.5))
-        #   mating_pool.extend(ammount)
     for i in range(int(len(mating_pool)/10)):
         mating_pool.append(create_session(sos))
     return mating_pool
 
 #population#
-# [1] _ n генотипа : [0] _ proc(при 0) coef(при 1): [1] _ n в очереди
+# [n] _ n генотипа : [0] _ проц. от банка(при 0) коэф. ставки(при 1): [n] _ номер хромосомы
 
 def crossover(genotype_1, genotype_2): ## на вход принимает генотипы ёпты
     kid = create_session(sos)
     for purpose in range(len(genotype_1)):
         for order in range(len(genotype_1[purpose])):
-            cut_point = random.randint(0, len(genotype_2[0][0])) #### нужно
+            cut_point = random.randint(0, len(genotype_2[0][0]))
             half_parent1 = list(genotype_1[purpose][order])[:cut_point]
             half_parent2 = list(genotype_2[purpose][order])[cut_point:]
-            #  * child = half_parent1 + half_parent2
             child = "".join(half_parent1 + half_parent2)
             kid[purpose][order] = child
     return kid
@@ -218,13 +217,13 @@ def improve_population(population, coefs, bank, top = 0.2, rand = 0.2):
         while coef_1 == coef_2:
             coef_2 = random.randint(0,len(population)-1)
         kid = crossover(population[coef_1],population[coef_2])
-        #kid = mutate(kid)
+
         new_pop.append(mutation(kid))
     return new_pop
 
 def natsel(population, all_coefs, bank, gen_num):
     global test
-    ## 1.Промотка коэффициентов 50
+    ## 1.Промотка коэффициентов 20
     ## 2.Эволюция популяции
     ## 3.Оценка популяции ? Возможно не пригодится
     ## 4.Нахождение наилучшего score в текущий популяции
