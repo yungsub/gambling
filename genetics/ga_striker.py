@@ -11,7 +11,7 @@ database = None
 coefs_db = None
 
 alphabet = "10"
-lb = 0
+lb = 1
 length = 100
 sos = 10
 lb_1 = 1.01
@@ -119,7 +119,7 @@ def get_score(genotype, the_bank, coefs, proc = 0.3):
             our_coef = pred_fen[n]
             real_coef = results[n]
             our_perc = bank_perc[n]
-            if our_coef <= real_coef:
+            if our_coef < real_coef:
                 bank += (our_coef*our_perc*bank - our_perc*bank)
             else:
                 bank -= our_perc*bank
@@ -232,8 +232,8 @@ def natsel(population, all_coefs, bank, gen_num):
     for n in range(0, gen_num):
         t = time.time()
         # 1.
-        start = 200*n
-        finish = 200*(n+1)+1
+        start = 1000*n
+        finish = 1000*(n+1)+1
         coefs = all_coefs[start:finish]
         # 2.
         population = improve_population(population, coefs, bank)
