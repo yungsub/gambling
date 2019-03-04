@@ -140,18 +140,18 @@ def selection(population, coefs, the_bank):
     reg_coef = np.mean(scores)
 
     for ind in range(len(scores)):
-        score = scores[ind]
-        if (score > 17):
-            ammount = population[ind]*int((score*score*score*10)/reg_coef)
+        score = (scores[ind])/10
+        if (score > 9):
+            ammount = population[ind]*int((score*score*score*10)/(reg_coef/10))
             mating_pool.extend(ammount)
-        if (score > 15):
-            ammount = population[ind]*int((score*score*score)/reg_coef)
+        if (score > 6):
+            ammount = population[ind]*int((score*score*score)/(reg_coef/10))
             mating_pool.extend(ammount)
-        elif (score > 10):
-            ammount = population[ind]*int((score*score)/reg_coef)
+        elif (score > 4):
+            ammount = population[ind]*int((score*score)/(reg_coef/10))
             mating_pool.extend(ammount)
         elif (score > 0):
-            ammount = population[ind]*int((score)/reg_coef)
+            ammount = population[ind]*int((score)/(reg_coef/10))
             mating_pool.extend(ammount)
         if len(mating_pool)<1000:
             ammount = population[ind]
@@ -194,7 +194,7 @@ def mutation(genome, gamma = 0.95):
                 genome[purpose][order] = create_chromosome()
     return genome
 
-def improve_population(population, coefs, bank, top = 0.2, rand = 0.2):
+def improve_population(population, coefs, bank, top = 0.2, rand = 0.1):
     pop_length = len(population)
     new_pop = []
     mating_pool = selection(population, coefs, bank)
@@ -208,8 +208,8 @@ def improve_population(population, coefs, bank, top = 0.2, rand = 0.2):
     new_chromes = scores_chrom[:coef_4_best]
     new_pop = [population[i] for  i in new_chromes]
 
-    #for i in range(int(len(population)*rand)):
-    #    new_pop.append(create_session(sos))
+    for i in range(int(len(population)*rand)):
+        new_pop.append(create_session(sos))
 
     while len(new_pop) != len(population):
         coef_1 = random.randint(0,len(population)-1)
@@ -244,8 +244,8 @@ def natsel(population, all_coefs, bank, gen_num):
             scores.append(get_score(genotype, bank, coefs))
         best = population[scores.index(max(scores))]
         best_population.append(best)
-        if i%10 == 0:
-            print(to_coef(bank), to_perc(bankS))
+        if n%10 == 0:
+            print(get_fen_data(best))
         # 5
 
         print(f'gen - {n}, score: {max(scores)}, mean: {np.mean(scores)}, time: {time.time() - t}')
@@ -253,7 +253,7 @@ def natsel(population, all_coefs, bank, gen_num):
 
 if __name__ == "__main__":
     import pickle
-    _download_db()
+    #_download_db()
     _init_db()
     _setup_coefs()
 
