@@ -244,6 +244,8 @@ def natsel(population, all_coefs, bank, gen_num):
             scores.append(get_score(genotype, bank, coefs))
         best = population[scores.index(max(scores))]
         best_population.append(best)
+        if i%10 == 0:
+            print(to_coef(bank), to_perc(bankS))
         # 5
 
         print(f'gen - {n}, score: {max(scores)}, mean: {np.mean(scores)}, time: {time.time() - t}')
@@ -251,7 +253,7 @@ def natsel(population, all_coefs, bank, gen_num):
 
 if __name__ == "__main__":
     import pickle
-    # _download_db()
+    _download_db()
     _init_db()
     _setup_coefs()
 
